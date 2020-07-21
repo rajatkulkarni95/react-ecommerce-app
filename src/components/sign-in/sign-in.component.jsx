@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FormInput } from "../form-input/form-input.component";
 import { CustomButton } from "../custom-button/custom-button.component";
 import "./sign-in.styles.scss";
+import { auth } from "../../firebase/firebase.utils";
 
 import { signInWithGoogle } from "../../firebase/firebase.utils";
 
@@ -11,7 +12,18 @@ export const SignIn = () => {
     password: "",
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    const { email, password } = state;
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      setState({
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      console.log(`Cannot sign in with email and password: ${error}`);
+    }
     event.preventDefault();
   };
 
@@ -33,7 +45,7 @@ export const SignIn = () => {
           handleChange={handleChange}
           value={state.email}
           type="email"
-          label="email"
+          label="Email"
           required
         />
         <FormInput
@@ -41,7 +53,7 @@ export const SignIn = () => {
           handleChange={handleChange}
           value={state.password}
           type="password"
-          label="password"
+          label="Password"
           required
         />
         <div className="buttons">

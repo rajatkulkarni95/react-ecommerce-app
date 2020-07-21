@@ -5,21 +5,10 @@ import { HomePage } from "./pages/homepage/homepage.component";
 import { ShopPage } from "./pages/shop/shop.component";
 import { Header } from "./components/header/header.component";
 import { SignInSignUpPage } from "./pages/signIn-signUp/signIn-signUp.component";
-import { auth } from "./firebase/firebase.utils";
+import { useFirebaseLogin } from "./hooks/useFirebaseLogin";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
-  let unsubscribeFromAuth = null;
-  useEffect(() => {
-    unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-
-      console.log(user);
-      return () => {
-        unsubscribeFromAuth();
-      };
-    });
-  }, [currentUser]);
+  const { currentUser } = useFirebaseLogin();
 
   return (
     <div>
